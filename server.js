@@ -8,10 +8,7 @@ var app = express();
 const request = require("request");
 const csv = require("csvtojson");
 var tall = require("tall").default;
-var http = require("follow-redirects").http;
-var https = require("follow-redirects").https;
-var url = require("url");
-var followRedirects = require("follow-redirects");
+var fs = require("fs");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -59,6 +56,13 @@ function searchAddress(URL) {
                 function(error, response, body) {
                   if (!error) {
                     console.log(response.request.uri.href);
+                    fs.appendFile('urls.txt', response.request.uri.href + "\n", function (err) {
+                      if (err) {
+                        // append failed
+                      } else {
+                        // done
+                      }
+                    })
                   }
                 }
               );
@@ -90,7 +94,7 @@ function searchAddress(URL) {
 
             setTimeout(() => {
               resolve();
-            }, 5000);
+            }, 50);
           } else {
             resolve();
           }
@@ -149,34 +153,34 @@ function lengthen(url) {
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
-// init sqlite db
-var fs = require("fs");
-var dbFile = "./.data/sqlite.db";
-var exists = fs.existsSync(dbFile);
-var sqlite3 = require("sqlite3").verbose();
-var db = new sqlite3.Database(dbFile);
+// // init sqlite db
+// var fs = require("fs");
+// var dbFile = "./.data/sqlite.db";
+// var exists = fs.existsSync(dbFile);
+// var sqlite3 = require("sqlite3").verbose();
+// var db = new sqlite3.Database(dbFile);
 
-// if ./.data/sqlite.db does not exist, create it, otherwise print records to console
-db.serialize(function() {
-  if (!exists) {
-    db.run("CREATE TABLE Dreams (dream TEXT)");
-    console.log("New table Dreams created!");
+// // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
+// db.serialize(function() {
+//   if (!exists) {
+//     db.run("CREATE TABLE Dreams (dream TEXT)");
+//     console.log("New table Dreams created!");
 
-    // insert default dreams
-    db.serialize(function() {
-      db.run(
-        'INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")'
-      );
-    });
-  } else {
-    // console.log('Database "Dreams" ready to go!');
-    db.each("SELECT * from Dreams", function(err, row) {
-      if (row) {
-        console.log("record:", row);
-      }
-    });
-  }
-});
+//     // insert default dreams
+//     db.serialize(function() {
+//       db.run(
+//         'INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")'
+//       );
+//     });
+//   } else {
+//     // console.log('Database "Dreams" ready to go!');
+//     db.each("SELECT * from Dreams", function(err, row) {
+//       if (row) {
+//         console.log("record:", row);
+//       }
+//     });
+//   }
+// });
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function(request, response) {

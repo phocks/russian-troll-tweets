@@ -14,8 +14,7 @@
     "sqlite3": "^4.0.0",
     "csvtojson": "^2.0.8",
     "request": "^2.88.0",
-    "tall": "^1.0.2",
-    "follow-redirects": "^1.5.8"
+    "tall": "^1.0.2"
   },
   "engines": {
     "node": "8.x"
