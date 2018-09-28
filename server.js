@@ -48,24 +48,25 @@ function searchAddress(URL) {
             // lengthen(matches[0]);
 
             matches.forEach(match => {
-              request(
-                {
-                  followAllRedirects: true,
-                  url: match
-                },
-                function(error, response, body) {
-                  if (!error) {
-                    console.log(response.request.uri.href);
-                    fs.appendFile('urls.txt', response.request.uri.href + "\n", function (err) {
-                      if (err) {
-                        // append failed
-                      } else {
-                        // done
-                      }
-                    })
-                  }
-                }
-              );
+              lengthen(match);
+              // request(
+              //   {
+              //     followAllRedirects: true, 
+              //     url: match
+              //   },
+              //   function(error, response, body) {
+              //     if (!error) {
+              //       console.log(response.request.uri.href);
+              //       fs.appendFile('urls.txt', response.request.uri.href + "\n", function (err) {
+              //         if (err) {
+              //           // append failed
+              //         } else {
+              //           // done
+              //         }
+              //       })
+              //     }
+              //   }
+              // );
             });
 
             // https.get(matches[0], function (response) {
@@ -137,21 +138,33 @@ function lengthen(url) {
         unshortenedUrl.includes("intern.az") ||
         unshortenedUrl.includes("nyti.ms") ||
         unshortenedUrl.includes("trib.al") ||
-        unshortenedUrl.includes("youtu.be")
+        unshortenedUrl.includes("youtu.be") ||
+        unshortenedUrl.includes("l43.it") ||
+        unshortenedUrl.includes("wp.me") ||
+        unshortenedUrl.includes("larep.it") 
       ) {
         lengthen(unshortenedUrl);
       } else {
-        console.log(unshortenedUrl);
+        if (!unshortenedUrl.includes("//twitter.com/")) {
+          console.log(unshortenedUrl);
+          fs.appendFile('./public/urls.txt', unshortenedUrl + "\n", function (err) {
+              if (err) {
+                // append failed
+              } else {
+                // done
+              }
+            });
+        }
       }
     })
-    .catch(err => console.error("AAAW 👻", err));
+    .catch(err => console.error("AAAW 👻", err)); 
 }
 
 // we've started you off with Express,
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
 // http://expressjs.com/en/starter/static-files.html
-app.use(express.static("public"));
+app.use(express.static("public")); 
 
 // // init sqlite db
 // var fs = require("fs");
@@ -191,6 +204,10 @@ app.get("/", function(request, response) {
 // currently this is the only endpoint, ie. adding dreams won't update the database
 // read the sqlite3 module docs and try to add your own! https://www.npmjs.com/package/sqlite3
 app.get("/getDreams", function(request, response) {
+  response.send(JSON.stringify({hello: "hi"}));
+});
+
+app.get("/process", function(request, response) {
   searchAddress(streams[i]);
   response.send(JSON.stringify({hello: "hi"}));
 });
