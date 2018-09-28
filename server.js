@@ -14,23 +14,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const streams = [
   "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_1.csv?1538012690318",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_2.csv?1538013265449",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_3.csv?1538013332155",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_4.csv?1538013717376",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_5.csv?1538020205607",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_6.csv?1538020446976",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_7.csv?1538020503069",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_8.csv?1538020570580",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_9.csv?1538020618852",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_10.csv?1538020661530",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_11.csv?1538020717103",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_12.csv?1538020757426",
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_13.csv?1538006860276"
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_2.csv?1538013265449",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_3.csv?1538013332155",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_4.csv?1538013717376",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_5.csv?1538020205607",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_6.csv?1538020446976",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_7.csv?1538020503069",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_8.csv?1538020570580",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_9.csv?1538020618852",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_10.csv?1538020661530",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_11.csv?1538020717103",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_12.csv?1538020757426",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_13.csv?1538006860276"
 ];
 
 let i = 0;
 
-searchAddress(streams[i]);
+
 
 function searchAddress(URL) {
   csv()
@@ -43,7 +43,7 @@ function searchAddress(URL) {
           if (json.content.includes("t.co")) {
             // console.log(json.author + ": " + json.content);
 
-            var matches = json.content.match(/\bhttps?:\/\/\S+/gi);
+            var matches = json.content.match(/\bhttps?:\/\/t.co\/[a-zA-Z0-9]+/gi);
             // console.log(matches);
             // lengthen(matches[0]);
 
@@ -191,9 +191,8 @@ app.get("/", function(request, response) {
 // currently this is the only endpoint, ie. adding dreams won't update the database
 // read the sqlite3 module docs and try to add your own! https://www.npmjs.com/package/sqlite3
 app.get("/getDreams", function(request, response) {
-  db.all("SELECT * from Dreams", function(err, rows) {
-    response.send(JSON.stringify(rows));
-  });
+  searchAddress(streams[i]);
+  response.send(JSON.stringify({hello: "hi"}));
 });
 
 // listen for requests :)
