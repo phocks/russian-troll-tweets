@@ -13,7 +13,7 @@ var fs = require("fs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const streams = [
-  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_1.csv?1538012690318",
+  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_1.csv?1538012690318",
   // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_2.csv?1538013265449",
   // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_3.csv?1538013332155",
   // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_4.csv?1538013717376",
@@ -25,7 +25,7 @@ const streams = [
   // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_10.csv?1538020661530",
   // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_11.csv?1538020717103",
   // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_12.csv?1538020757426",
-  // "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_13.csv?1538006860276"
+  "https://cdn.glitch.com/b55d6912-2066-451c-91fb-e57aa7fe4aa7%2FIRAhandle_tweets_13.csv?1538006860276"
 ];
 
 let i = 0;
@@ -48,21 +48,24 @@ function searchAddress(URL) {
             // lengthen(matches[0]);
 
             matches.forEach(match => {
+              // lengthen(match);
               request(
                 {
-                  followAllRedirects: true,
+                  followAllRedirects: true, 
                   url: match
                 },
                 function(error, response, body) {
                   if (!error) {
-                    console.log(response.request.uri.href);
-                    fs.appendFile('urls.txt', response.request.uri.href + "\n", function (err) {
-                      if (err) {
-                        // append failed
-                      } else {
-                        // done
-                      }
-                    })
+                    if (!response.request.uri.href.includes("//twitter.com/")) {
+                      console.log(response.request.uri.href);
+                      fs.appendFile('./public/urls.txt', response.request.uri.href + "\n", function (err) {
+                        if (err) {
+                          // append failed
+                        } else {
+                          // done
+                        }
+                      })
+                    }
                   }
                 }
               );
@@ -94,7 +97,7 @@ function searchAddress(URL) {
 
             setTimeout(() => {
               resolve();
-            }, 50);
+            }, 100);
           } else {
             resolve();
           }
@@ -137,21 +140,33 @@ function lengthen(url) {
         unshortenedUrl.includes("intern.az") ||
         unshortenedUrl.includes("nyti.ms") ||
         unshortenedUrl.includes("trib.al") ||
-        unshortenedUrl.includes("youtu.be")
+        unshortenedUrl.includes("youtu.be") ||
+        unshortenedUrl.includes("l43.it") ||
+        unshortenedUrl.includes("wp.me") ||
+        unshortenedUrl.includes("larep.it") 
       ) {
         lengthen(unshortenedUrl);
       } else {
-        console.log(unshortenedUrl);
+        if (!unshortenedUrl.includes("//twitter.com/")) {
+          console.log(unshortenedUrl);
+          fs.appendFile('./public/urls.txt', unshortenedUrl + "\n", function (err) {
+              if (err) {
+                // append failed
+              } else {
+                // done
+              }
+            });
+        }
       }
     })
-    .catch(err => console.error("AAAW 👻", err));
+    .catch(err => console.error("AAAW 👻", err)); 
 }
 
 // we've started you off with Express,
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
 // http://expressjs.com/en/starter/static-files.html
-app.use(express.static("public"));
+app.use(express.static("public")); 
 
 // // init sqlite db
 // var fs = require("fs");
@@ -191,11 +206,15 @@ app.get("/", function(request, response) {
 // currently this is the only endpoint, ie. adding dreams won't update the database
 // read the sqlite3 module docs and try to add your own! https://www.npmjs.com/package/sqlite3
 app.get("/getDreams", function(request, response) {
+  response.send(JSON.stringify({hello: "hi"}));
+});
+
+app.get("/process", function(request, response) {
   searchAddress(streams[i]);
   response.send(JSON.stringify({hello: "hi"}));
 });
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function() {
+var listener = app.listen(1337, function() {
   console.log("Your app is listening on port " + listener.address().port);
 });

@@ -1,7 +1,6 @@
 dependencies:
   csvtojson: 2.0.8
   express: 4.16.3
-  follow-redirects: 1.5.8
   request: 2.88.0
   sqlite3: 4.0.0
   tall: 1.0.2
@@ -165,12 +164,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
-  /debug/3.1.0:
-    dependencies:
-      ms: 2.0.0
-    dev: false
-    resolution:
-      integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
   /delayed-stream/1.0.0:
     dev: false
     engines:
@@ -296,14 +289,6 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha512-Y1GUDo39ez4aHAw7MysnUD5JzYX+WaIj8I57kO3aEPT1fFRL4sr7mjei97FgnwhAyyzRYmQZaTHb2+9uZ1dPtg==
-  /follow-redirects/1.5.8:
-    dependencies:
-      debug: 3.1.0
-    dev: false
-    engines:
-      node: '>=4.0'
-    resolution:
-      integrity: sha512-sy1mXPmv7kLAMKW/8XofG7o9T+6gAjzdZK4AJF6ryqQYUa/hnzgiypoeUecZ53x7XiqKNEpNqLtS97MshW2nxg==
   /forever-agent/0.6.1:
     dev: false
     resolution:
@@ -761,7 +746,6 @@ shrinkwrapVersion: 3
 specifiers:
   csvtojson: ^2.0.8
   express: ^4.16.3
-  follow-redirects: ^1.5.8
   request: ^2.88.0
   sqlite3: ^4.0.0
   tall: ^1.0.2
