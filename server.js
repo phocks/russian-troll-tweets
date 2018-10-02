@@ -48,27 +48,8 @@ function searchAddress(URL) {
             // lengthen(matches[0]);
 
             matches.forEach(match => {
-              // lengthen(match);
-              request(
-                {
-                  followAllRedirects: true, 
-                  url: match
-                },
-                function(error, response, body) {
-                  if (!error) {
-                    if (!response.request.uri.href.includes("//twitter.com/")) {
-                      console.log(response.request.uri.href);
-                      fs.appendFile('./public/urls.txt', response.request.uri.href + "\n", function (err) {
-                        if (err) {
-                          // append failed
-                        } else {
-                          // done
-                        }
-                      })
-                    }
-                  }
-                }
-              );
+              lengthen(match);
+              // nativeRequest(match);
             });
 
             // https.get(matches[0], function (response) {
@@ -149,17 +130,38 @@ function lengthen(url) {
       } else {
         if (!unshortenedUrl.includes("//twitter.com/")) {
           console.log(unshortenedUrl);
-          fs.appendFile('./public/urls.txt', unshortenedUrl + "\n", function (err) {
-              if (err) {
-                // append failed
-              } else {
-                // done
-              }
-            });
+          writeUrl(unshortenedUrl)
         }
       }
     })
     .catch(err => console.error("AAAW 👻", err)); 
+}
+
+function nativeRequest(url) {
+  request(
+    {
+      followAllRedirects: true, 
+      url: url
+    },
+    function(error, response, body) {
+      if (!error) {
+        if (!response.request.uri.href.includes("//twitter.com/")) {
+          console.log(response.request.uri.href);
+          writeUrl(response.request.uri.href)
+        }
+      }
+    }
+  );
+}
+
+function writeUrl(url) {
+  fs.appendFile('./public/urls.txt', url + "\n", function (err) {
+    if (err) {
+      // append failed
+    } else {
+      // done
+    }
+  });
 }
 
 // we've started you off with Express,
